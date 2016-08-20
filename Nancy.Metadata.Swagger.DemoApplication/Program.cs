@@ -16,6 +16,8 @@ namespace Nancy.Metadata.Swagger.DemoApplication
             Console.WriteLine("Press <Enter> to exit");
 
             Console.ReadLine();
+
+            host.Dispose();
         }
     }
 }
