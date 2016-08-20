@@ -4,7 +4,7 @@ Nancy.Metadata.Swagger is a library that makes it easier to create API documenta
 
 ## Dependencies
 
-Nancy.Metadata.Swagger uses Json.NET (http://www.newtonsoft.com/json) to generate documentation and Json.NET Schema (http://www.newtonsoft.com/jsonschema) to generate objects schema (you may need license key for it if you want to generate objects schema)
+Nancy.Metadata.Swagger uses Json.NET (http://www.newtonsoft.com/json) to generate documentation and NJsonSchema (https://github.com/NJsonSchema/NJsonSchema) to generate objects schema
 Also it uses some of Nancy stuff, so it should be installed to.
 
 # Gettings started
@@ -61,14 +61,6 @@ You also need to create one additional module that will return you json document
 
 Now you are able to add swagger UI (you can download it from http://swagger.io/swagger-ui/) and point it to your docs module.
 In index.html file you can set default url where ui should get json documentation file.
-
-## Configuring Json.NET schema license
-
-Json.NET schema is limited with 10 schema generations per hour, so if you have more objects you need to configure license for it by:
-
-	Nancy.Metadata.Swagger.Core.LicenseInstsaller.SetJsonSchemaLicense(Settings.Default.JsonSchemaLicenseKey);
-
-It should be added before Nancy configuration.
 
 # Additional information
 
