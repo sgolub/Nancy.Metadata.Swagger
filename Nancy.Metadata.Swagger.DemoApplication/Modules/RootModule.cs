@@ -1,4 +1,5 @@
-﻿using Nancy.Metadata.Modules;
+﻿using System;
+using Nancy.Metadata.Modules;
 using Nancy.Metadata.Swagger.Core;
 using Nancy.Metadata.Swagger.DemoApplication.Model;
 using Nancy.Metadata.Swagger.Fluent;
@@ -12,11 +13,25 @@ namespace Nancy.Metadata.Swagger.DemoApplication.Modules
         {
             Get["SimpleRequest", "/hello"] = r => HelloWorld();
             Get["SimpleRequestWithParameter", "/hello/{name}"] = r => Hello(r.name);
+            Get["SimpleRequestWithGenericModel", "/hello/generic"] = r => GenericHelloModel();
 
             Post["SimplePostRequst", "/hello"] = r => HelloPost();
             Post["PostRequestWithModel", "/hello/model"] = r => HelloModel();
 
             Post["PostRequestWithNestedModel", "/hello/nestedmodel"] = r => HelloNestedModel();
+        }
+
+        private dynamic GenericHelloModel()
+        {
+            GenericResponseModel<SimpleResponseModel> response = new GenericResponseModel<SimpleResponseModel>
+            {
+                Child = new SimpleResponseModel
+                {
+                    Hello = "Hello Post!"
+                }
+            };
+
+            return Response.AsJson(response);
         }
 
         private Response HelloNestedModel()
@@ -84,6 +99,11 @@ namespace Nancy.Metadata.Swagger.DemoApplication.Modules
 
             Describe["SimpleRequestWithParameter"] = desc => new SwaggerRouteMetadata(desc)
                 .With(i => i.WithResponseModel("200", typeof(SimpleResponseModel), "Sample response")
+                            .WithRequestParameter("name")
+                            .WithSummary("Simple GET with generic model"));
+
+            Describe["SimpleRequestWithGenericModel"] = desc => new SwaggerRouteMetadata(desc)
+                .With(i => i.WithResponseModel("200", typeof(GenericResponseModel<SimpleResponseModel>), "Sample response")
                             .WithRequestParameter("name")
                             .WithSummary("Simple GET with parameters"));
 

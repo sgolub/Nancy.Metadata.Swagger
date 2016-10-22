@@ -88,7 +88,7 @@ namespace Nancy.Metadata.Swagger.Fluent
             {
                 if (tags.Length == 0)
                 {
-                    tags = new[] {"default"};
+                    tags = new[] { "default" };
                 }
 
                 endpointInfo.Tags = tags;
@@ -127,14 +127,15 @@ namespace Nancy.Metadata.Swagger.Fluent
 
         private static string GetOrSaveSchemaReference(Type type)
         {
-            string key = type.FullName;
+            string key = type.Name.IndexOf('`') < 0 ? type.Name : type.Name.Remove(type.Name.IndexOf('`'));
 
             if (SchemaCache.Cache.ContainsKey(key))
             {
                 return key;
             }
 
-            var schema = JsonSchema4.FromType(type, new JsonSchemaGeneratorSettings {
+            var schema = JsonSchema4.FromType(type, new JsonSchemaGeneratorSettings
+            {
                 NullHandling = NullHandling.Swagger,
                 DefaultPropertyNameHandling = PropertyNameHandling.CamelCase
             });

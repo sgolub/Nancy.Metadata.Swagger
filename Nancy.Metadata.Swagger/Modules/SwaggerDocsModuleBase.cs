@@ -4,7 +4,6 @@ using Nancy.Metadata.Swagger.Model;
 using Nancy.Routing;
 using Newtonsoft.Json;
 using NJsonSchema;
-//using Newtonsoft.Json.Schema;
 
 namespace Nancy.Metadata.Swagger.Modules
 {
@@ -45,7 +44,14 @@ namespace Nancy.Metadata.Swagger.Modules
                 GenerateSpecification();
             }
 
-            return Response.AsText(JsonConvert.SerializeObject(swaggerSpecification, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+            return Response.AsText(
+                JsonConvert.SerializeObject(
+                    swaggerSpecification, 
+                    Formatting.None,
+                    new JsonSerializerSettings {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        Converters = new List<JsonConverter>() { new JsonSchema4JsonConverter() }
+                    }));
         }
 
         private void GenerateSpecification()
