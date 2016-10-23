@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Nancy.Metadata.Swagger.Core;
 using Nancy.Metadata.Swagger.Model;
@@ -127,7 +128,7 @@ namespace Nancy.Metadata.Swagger.Fluent
 
         private static string GetOrSaveSchemaReference(Type type)
         {
-            string key = type.Name.IndexOf('`') < 0 ? type.Name : type.Name.Remove(type.Name.IndexOf('`'));
+            string key = GetSafeTypeName(type);
 
             if (SchemaCache.Cache.ContainsKey(key))
             {
@@ -143,6 +144,14 @@ namespace Nancy.Metadata.Swagger.Fluent
             SchemaCache.Cache[key] = schema;
 
             return key;
+        }
+
+        internal static string GetSafeTypeName(Type type)
+        {
+            if (type.IsConstructedGenericType)
+                return type.Name.Split('`').First() + "Of" + string.Join("And", type.GenericTypeArguments.Select(GetSafeTypeName));
+
+            return type.Name;
         }
     }
 }
