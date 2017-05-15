@@ -108,7 +108,7 @@ namespace Nancy.Metadata.Swagger.DemoApplication.Modules
                             .WithSummary("Simple GET with parameters"));
 
             Describe["SimplePostRequst"] = desc => new SwaggerRouteMetadata(desc)
-                .With(info => info.WithResponseModel("200", typeof(SimpleResponseModel), "Sample response")
+                .With(info => info.WithResponseModel("200", typeof(GenericResponseModel<NestedRequestModel>), "Sample response")
                     .WithSummary("Simple POST example"));
 
             Describe["PostRequestWithModel"] = desc => new SwaggerRouteMetadata(desc)
